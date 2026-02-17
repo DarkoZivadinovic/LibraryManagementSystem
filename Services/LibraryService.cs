@@ -9,6 +9,13 @@ public class LibraryService : ILibraryService
         if (book is null) throw new ArgumentNullException(nameof(book));
         if (member is null) throw new ArgumentNullException(nameof(member));
 
+        var alreadyBorrowed = _loans.Any( l =>
+            l.Book == book && l.Member == member && !l.IsReturned
+        );
+        
+        if(alreadyBorrowed)
+            throw new InvalidOperationException($"{member.FirstName} already borrowed this book");
+
         book.BorrowCopy(); //proverava da li ima kopija
         var loan = new Loan(book,member);
         _loans.Add(loan);
@@ -29,20 +36,33 @@ public class LibraryService : ILibraryService
         return book;
 
     }
-   public Member RegisterMember(string firstName, string lastName)
-{
-    var member = new Member(firstName, lastName);
-    _members.Add(member);
-    return member;
-}
-
+    public Member RegisterMember(string firstName, string lastName)
+    {
+        var member = new Member(firstName, lastName);
+        _members.Add(member);
+        return member;
+    }
     public IReadOnlyList<Book> GetAllBooks()
     {
         return _books.AsReadOnly();
     }
     public IReadOnlyList<Member> GetAllMembers()
-{
-    return _members.AsReadOnly();
-}
+    {
+        return _members.AsReadOnly();
+    }
+    public IReadOnlyList<Book> GetAvaivableBooks()
+    {
+        return _books
+                    .Where(b => b.AvaivableCopies > 0)
+                    .ToList()
+                    .AsReadOnly();
+    }
+    public IReadOnlyList<Loan> GetActiveLoansForMember(Member member)
+    {
+        return _loans
+                    .Where(l => l.Member == member && !l.IsReturned)
+                    .ToList()
+                    .AsReadOnly();
+    }
 
 }

@@ -4,7 +4,7 @@ public class Book
     public string Title { get; private set; }
     public string Author { get; private set; }
     //public bool IsBorrowed{ get ; private set;}
-    public int AvailableCopies{ get ; private set;}
+    public int AvaivableCopies{ get ; private set;}
     public Book(string title,string author, int totalCopies)
     {
         if(string.IsNullOrWhiteSpace(title))
@@ -18,18 +18,18 @@ public class Book
 
         Title = title;
         Author = author;
-        AvailableCopies = totalCopies;
+       AvaivableCopies = totalCopies;
     }
     public void BorrowCopy()
     {
-        if (AvailableCopies <= 0)
+        if (AvaivableCopies <= 0)
             throw new InvalidOperationException("Book is not avivable.");
 
-        AvailableCopies--;   
+       AvaivableCopies--;   
     }
 
     public void ReturnCopy()
     {
-        AvailableCopies++;
+       AvaivableCopies++;
     }
 }

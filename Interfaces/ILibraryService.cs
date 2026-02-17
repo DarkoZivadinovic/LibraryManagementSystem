@@ -7,4 +7,7 @@ public interface ILibraryService
 
     IReadOnlyList<Book> GetAllBooks();
     IReadOnlyList<Member> GetAllMembers();
+    IReadOnlyList<Book> GetAvaivableBooks();
+    IReadOnlyList<Loan> GetActiveLoansForMember(Member member);
+
 }
